@@ -1,0 +1,77 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    background-color: rgb(0, 255, 98);
+    color: brown;
+}
+.contenaire{
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    width: 500px;
+    max-width: 500px;
+    text-align: center;
+}
+h1{
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(33, 33, 69);
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+input , button , #download{
+    padding: 15px;
+    outline: none;
+    border: 35px;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    margin-top: 10px;
+    border-radius: 30px;
+}
+button , #download{
+    background-color: orange;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.6s;
+}
+button:hover , #download:hover{
+background-color: rgb(212, 174, 102);
+}
+.result{
+    margin-top: 10px;
+    width: 100%;
+    height: auto;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+}
+.result.active{
+    display: flex;
+}
+#qrcode{
+    margin-top: 10px;
+    width: 100%;
+    height: auto;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+
+}
+#download{
+    display: none;
+    margin-top: 10px;
+    font-size: 14px;
+    width: 100%;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecteur QR Code</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="contenaire">
+        <h1>Scan du QR Code</h1>
+        <button id="start-scanner">Scanner</button>
+        <div id="reader" style="width:500px; display: none;"></div>
+    </div>
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script>
+        const startButton = document.getElementById('start-scanner');
+        const readerDiv = document.getElementById('reader');
+        
+        function onScanSuccess(qrMessage) {
+            console.log(`QR Code détecté: ${qrMessage}`);
+            const form = document.createElement('form');
+            form.action = 'scan.php';
+            form.method = 'POST';
+
+            const qrInput = document.createElement('input');
+            qrInput.type = 'hidden';
+            qrInput.name = 'qr_id';
+            qrInput.value = qrMessage;
+            form.appendChild(qrInput);
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = determineAction();
+            form.appendChild(actionInput);
+
+            document.body.appendChild(form);
+            form.submit();
+
+            console.log("Formulaire soumis avec QR ID:", qrMessage);
+        }
+
+        function onScanError(errorMessage) {
+            console.error(`Erreur de scan: ${errorMessage}`);
+        }
+
+        const html5QrCode = new Html5Qrcode("reader");
+
+        startButton.addEventListener('click', () => {
+            readerDiv.style.display = 'block';
+            html5QrCode.start({ facingMode: "environment" }, {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            }, onScanSuccess, onScanError);
+        });
+
+        function determineAction() {
+            const currentHour = new Date().getHours();
+            return currentHour < 12 ? 'entrer' : 'sortir';
+        }
+    </script>
+</body>
+</html>
