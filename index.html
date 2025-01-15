@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>code QR</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="contenaire">
+        <h1>Generateur de code QR<hr></h1>
+        <div class="form">
+            <input type="text" id="text" placeholder="entrez un texte ou un lien">
+            <button id="generate">Generer</button>
+        </div>
+
+        <div class="result" id="result">
+            <canvas id="qrcode"></canvas>
+            <a id="download" href="" download="qrcode.png">Telecharger le code QR</a>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script>
+        const input = document.getElementById('text');
+        const generateButton = document.getElementById('generate');
+        const resultSection = document.getElementById('result');
+        const qrcodeCanvas = document.getElementById('qrcode');
+        const downloadLink = document.getElementById('download');
+
+        generateButton.addEventListener('click', () => {
+            const text = input.value.trim();
+            if (text) {
+                QRCode.toCanvas(qrcodeCanvas, text, { width: 400 }, (error) => {
+                    if (error) {
+                        console.error(error);
+                        return;
+                    }
+
+                    resultSection.classList.add('active');
+                    const imageDataURL = qrcodeCanvas.toDataURL('image/png');
+                    downloadLink.href = imageDataURL;
+                    downloadLink.style.display = 'inline';
+                });
+            } else {
+                alert('Veuillez entrer un texte ou un lien pour generer le code QR');
+            }
+        });
+    </script>
+</body>
+</html>
