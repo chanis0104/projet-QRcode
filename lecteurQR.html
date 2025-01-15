@@ -11,34 +11,46 @@
         <h1>Scan du QR Code</h1>
         <button id="start-scanner">Scanner</button>
         <div id="reader" style="width:500px; display: none;"></div>
+        <div id="qr-info" style="display:none;">
+            <h2>Informations du QR Code</h2>
+            <p id="qr-result"></p>
+        </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script> <!-- Correct CDNJS Link -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
     <script>
         const startButton = document.getElementById('start-scanner');
         const readerDiv = document.getElementById('reader');
-       
+        const qrInfoDiv = document.getElementById('qr-info');
+        const qrResultP = document.getElementById('qr-result');
+
         function onScanSuccess(qrMessage) {
             console.log(`QR Code détecté: ${qrMessage}`);
-            const form = document.createElement('form');
-            form.action = 'scan.php';
-            form.method = 'POST';
+            qrResultP.innerText = `QR Code: ${qrMessage}`;
+            qrInfoDiv.style.display = 'block';
 
-            const qrInput = document.createElement('input');
-            qrInput.type = 'hidden';
-            qrInput.name = 'qr_id';
-            qrInput.value = qrMessage;
-            form.appendChild(qrInput);
+            // Ajoutez un délai de 30 secondes avant de soumettre le formulaire pour montrer les informations du QR Code:
+            setTimeout(() => {
+                const form = document.createElement('form');
+                form.action = 'scan.php';
+                form.method = 'POST';
 
-            const actionInput = document.createElement('input');
-            actionInput.type = 'hidden';
-            actionInput.name = 'action';
-            actionInput.value = determineAction();
-            form.appendChild(actionInput);
+                const qrInput = document.createElement('input');
+                qrInput.type = 'hidden';
+                qrInput.name = 'qr_id';
+                qrInput.value = qrMessage;
+                form.appendChild(qrInput);
 
-            document.body.appendChild(form);
-            form.submit();
+                const actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'action';
+                actionInput.value = determineAction();
+                form.appendChild(actionInput);
 
-            console.log("Formulaire soumis avec QR ID:", qrMessage);
+                document.body.appendChild(form);
+                form.submit();
+
+                console.log("Formulaire soumis avec QR ID:", qrMessage);
+            }, 30000); // Délai de 30 secondes avant la soumission du formulaire
         }
 
         function onScanError(errorMessage) {
