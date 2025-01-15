@@ -15,6 +15,17 @@
             <h2>Informations du QR Code</h2>
             <p id="qr-result"></p>
         </div>
+
+        <!-- Formulaire pour le nom, la date et l'heure -->
+        <form id="additional-info" style="display:none;">
+            <label for="name">Nom:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <label for="time">Heure:</label>
+            <input type="time" id="time" name="time" required>
+            <button type="submit">Soumettre</button>
+        </form>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
     <script>
@@ -22,13 +33,23 @@
         const readerDiv = document.getElementById('reader');
         const qrInfoDiv = document.getElementById('qr-info');
         const qrResultP = document.getElementById('qr-result');
+        const additionalInfoForm = document.getElementById('additional-info');
 
         function onScanSuccess(qrMessage) {
             console.log(`QR Code détecté: ${qrMessage}`);
             qrResultP.innerText = `QR Code: ${qrMessage}`;
             qrInfoDiv.style.display = 'block';
+            additionalInfoForm.style.display = 'block';
 
-            // Ajoutez un délai de 30 secondes avant de soumettre le formulaire pour montrer les informations du QR Code:
+            // Remplir automatiquement les champs du formulaire avec la date et l'heure actuelles
+            const currentDate = new Date();
+            const formattedDate = currentDate.toISOString().substring(0, 10);
+            const formattedTime = currentDate.toTimeString().substring(0, 5);
+
+            document.getElementById('date').value = formattedDate;
+            document.getElementById('time').value = formattedTime;
+
+            // Ajoutez un délai de 30 secondes avant de soumettre le formulaire pour montrer les informations du QR Code
             setTimeout(() => {
                 const form = document.createElement('form');
                 form.action = 'scan.php';
@@ -46,10 +67,28 @@
                 actionInput.value = determineAction();
                 form.appendChild(actionInput);
 
+                // Ajouter les champs supplémentaires
+                const nameInput = document.createElement('input');
+                nameInput.type = 'hidden';
+                nameInput.name = 'name';
+                nameInput.value = document.getElementById('name').value;
+                form.appendChild(nameInput);
+
+                const dateInput = document.createElement('input');
+                dateInput.type = 'hidden';
+                dateInput.name = 'date';
+                dateInput.value = formattedDate;
+                form.appendChild(dateInput);
+
+                const timeInput = document.createElement('input');
+                timeInput.type = 'hidden';
+                timeInput.name = 'time';
+                timeInput.value = formattedTime;
+                form.appendChild(timeInput);
+
                 document.body.appendChild(form);
                 form.submit();
-
-                console.log("Formulaire soumis avec QR ID:", qrMessage);
+                console.log("Formulaire soumis avec QR ID :", qrMessage);
             }, 30000); // Délai de 30 secondes avant la soumission du formulaire
         }
 
@@ -63,10 +102,7 @@
             const html5QrCode = new Html5Qrcode("reader");
             html5QrCode.start(
                 { facingMode: "environment" }, // Utilise la caméra arrière
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 }
-                },
+                { fps: 60, qrbox: { width: 200, height: 200 } },
                 onScanSuccess,
                 onScanError
             );
