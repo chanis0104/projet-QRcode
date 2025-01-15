@@ -8,7 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($qrId) && !empty($action)) {
         // Ajouter votre logique de traitement ici
         echo "QR Code ID: " . $qrId . "<br>";
-        echo "Action: " . $action;
+        echo "Action: " . $action . "<br>";
+        echo "<p style='color: white;'>Formulaire soumis avec succès !</p>";
     } else {
         echo "QR Code ID ou Action manquant.";
     }
