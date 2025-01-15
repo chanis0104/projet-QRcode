@@ -1,13 +1,12 @@
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "root"; // Utilisateur par défaut pour XAMPP
+$password = "";    // Pas de mot de passe par défaut pour XAMPP
 $dbname = "qr_code_data";
 
 // Créer une connexion
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Vérifier la connexion
 if ($conn->connect_error) {
     die("Connexion échouée: " . $conn->connect_error);
 }
