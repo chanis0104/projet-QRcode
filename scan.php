@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
-$username = "root"; // Utilisateur par défaut pour XAMPP
-$password = "";    // Pas de mot de passe par défaut pour XAMPP
+$username = "root";
+$password = "";
 $dbname = "qr_code_data";
 
 // Créer une connexion
@@ -18,27 +18,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date = isset($_POST['date']) ? htmlspecialchars($_POST['date']) : '';
     $time = isset($_POST['time']) ? htmlspecialchars($_POST['time']) : '';
 
+    // Ajouter des messages de débogage
+    echo "Requête POST reçue.<br>";
+    echo "QR ID: " . $qrId . "<br>";
+    echo "Action: " . $action . "<br>";
+    echo "Nom: " . $name . "<br>";
+    echo "Date: " . $date . "<br>";
+    echo "Heure: " . $time . "<br>";
+
     if (!empty($qrId) && !empty($action) && !empty($name) && !empty($date) && !empty($time)) {
         $stmt = $conn->prepare("INSERT INTO scans (qr_id, action, name, date, time) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("sssss", $qrId, $action, $name, $date, $time);
 
         if ($stmt->execute()) {
             echo "Données enregistrées avec succès !<br>";
-            echo "QR Code ID: " . $qrId . "<br>";
-            echo "Action: " . $action . "<br>";
-            echo "Nom: " . $name . "<br>";
-            echo "Date: " . $date . "<br>";
-            echo "Heure: " . $time;
         } else {
-            echo "Erreur: " . $stmt->error;
+            echo "Erreur d'exécution: " . $stmt->error . "<br>";
         }
 
         $stmt->close();
     } else {
-        echo "QR Code ID, Action, Nom, Date ou Heure manquant.";
+        echo "QR Code ID, Action, Nom, Date ou Heure manquant.<br>";
     }
 } else {
-    echo "Méthode de requête non autorisée.";
+    echo "Méthode de requête non autorisée.<br>";
 }
 
 $conn->close();
